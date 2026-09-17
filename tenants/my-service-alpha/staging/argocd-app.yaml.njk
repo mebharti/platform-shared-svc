@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tenant--staging
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/mebharti/platform-shared-svc.git'
+    targetRevision: HEAD
+    path: 'tenants//staging'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: tenant--staging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

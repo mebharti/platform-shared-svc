@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tenant-{{ values.projectName or projectName }}-dev
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/mebharti/platform-shared-svc.git'
+    targetRevision: HEAD
+    path: 'tenants/{{ values.projectName or projectName }}/dev'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: tenant-{{ values.projectName or projectName }}-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
